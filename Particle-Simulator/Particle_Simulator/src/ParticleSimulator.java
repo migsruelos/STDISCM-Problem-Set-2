@@ -36,13 +36,6 @@ class ParticleSimulator extends JFrame {
         });
         buttonPanel.add(particleByVelocityButton);
 
-        JButton wallButton = new JButton("Add Wall");
-        wallButton.addActionListener(e -> {
-            WallInputDialog wallDialog = new WallInputDialog(this, canvas);
-            wallDialog.setVisible(true);
-        });
-        buttonPanel.add(wallButton);
-
         panel.add(buttonPanel);
         add(panel);
         setSize(1280, 720);
@@ -275,75 +268,3 @@ class ParticleByVelocityInputDialog extends JDialog {
     }
 }
 
-class WallInputDialog extends JDialog {
-    private boolean dialogOpen = false;
-    private JTextField wallX1Field;
-    private JTextField wallY1Field;
-    private JTextField wallX2Field;
-    private JTextField wallY2Field;
-    private Canvas canvas;
-
-    WallInputDialog(JFrame parent, Canvas canvas) {
-        super(parent, "Wall Input", true);
-        this.canvas = canvas;
-        setLocationRelativeTo(parent);
-        setSize(400, 300);
-
-        initUI();
-    }
-
-    private void initUI() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 5, 5, 5);
-
-        wallX1Field = createInputField();
-        wallY1Field = createInputField();
-        wallX2Field = createInputField();
-        wallY2Field = createInputField();
-
-        addRow(panel, gbc, "Wall X1:", wallX1Field);
-        addRow(panel, gbc, "Wall Y1:", wallY1Field);
-        addRow(panel, gbc, "Wall X2:", wallX2Field);
-        addRow(panel, gbc, "Wall Y2:", wallY2Field);
-
-        JButton submitButton = new JButton("Submit");
-        submitButton.addActionListener(e -> {
-            // get user input
-            double wallX1 = Double.parseDouble(wallX1Field.getText());
-            double wallY1 = Double.parseDouble(wallY1Field.getText());
-            double wallX2 = Double.parseDouble(wallX2Field.getText());
-            double wallY2 = Double.parseDouble(wallY2Field.getText());
-
-            // add walls to canvas
-            canvas.addWalls(wallX1, wallY1, wallX2, wallY2);
-
-            // close the dialog
-            setVisible(false);
-        });
-
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        panel.add(submitButton, gbc);
-
-        add(panel);
-    }
-
-    private JTextField createInputField() {
-        JTextField textField = new JTextField();
-        textField.setPreferredSize(new Dimension(150, 25));
-        return textField;
-    }
-
-    private void addRow(JPanel panel, GridBagConstraints gbc, String labelText, JTextField textField) {
-        gbc.gridx = 0;
-        gbc.gridy++;
-        panel.add(new JLabel(labelText), gbc);
-
-        gbc.gridx = 1;
-        panel.add(textField, gbc);
-    }
-}
