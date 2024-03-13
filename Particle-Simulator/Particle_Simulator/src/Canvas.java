@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Line2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -34,8 +35,11 @@ class Particle {
     }
 }
 
-class Canvas extends JPanel {
+class Canvas extends JPanel implements KeyListener{
     private List<Particle> particles;
+    private List<Particle> explorerParticles;
+    private boolean explorerMode = false;
+    private Particle explorerSprite;
 
     private int frameCount = 0;
     private int fps;
@@ -43,11 +47,59 @@ class Canvas extends JPanel {
 
     Canvas() {
         particles = new ArrayList<>();
+        explorerParticles = new ArrayList<>();
         setPreferredSize(new Dimension(1280, 720));
+        addKeyListener(this);
+        setFocusable(true);
+        requestFocusInWindow();
 
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
         executorService.scheduleAtFixedRate(this::calculateFPS, 0, 500, TimeUnit.MILLISECONDS);
     }
+
+    void toggleExplorerMode() {
+        explorerMode = !explorerMode;
+        if (explorerMode) {
+            explorerSprite = new Particle(640, 360, 0, 0);
+            explorerParticles.clear();
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (explorerMode) {
+            int keyCode = e.getKeyCode();
+            switch (keyCode) {
+                case KeyEvent.VK_UP:
+                    explorerSprite.velocity = 80;
+                    explorerSprite.angle = 0;
+                    break;
+                case KeyEvent.VK_DOWN:
+                    explorerSprite.velocity = 80;
+                    explorerSprite.angle = 180;
+                    break;
+                case KeyEvent.VK_LEFT:
+                    explorerSprite.velocity = 80;
+                    explorerSprite.angle = 270;
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    explorerSprite.velocity = 80;
+                    explorerSprite.angle = 90;
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (explorerMode) {
+            explorerSprite.velocity = 0;
+        }
+    }
+
 
     private void updateFPS() {
         fps = frameCount * 2;
@@ -100,15 +152,42 @@ class Canvas extends JPanel {
         Image offscreen = createImage(getWidth(), getHeight());
         Graphics offscreenGraphics = offscreen.getGraphics();
 
-        offscreenGraphics.setColor(Color.GREEN);
-        for (Particle particle : particles) {
-            offscreenGraphics.fillOval((int) particle.x - 5, (int) particle.y - 5, 10, 10);
+        if (explorerMode) {
+            // Render explorer mode
+            renderExplorerMode(offscreenGraphics);
+        } else {
+            // Render developer mode
+            renderDeveloperMode(offscreenGraphics);
         }
 
         offscreenGraphics.setColor(Color.BLACK);
         offscreenGraphics.drawString("FPS: " + calculateFPS(), 10, 20);
 
         g.drawImage(offscreen, 0, 0, this);
+    }
+
+    private void renderDeveloperMode(Graphics offscreenGraphics) {
+        offscreenGraphics.setColor(Color.GREEN);
+        for (Particle particle : particles) {
+            offscreenGraphics.fillOval((int) particle.x - 5, (int) particle.y - 5, 10, 10);
+        }
+
+        offscreenGraphics.setColor(Color.BLACK);
+        offscreenGraphics.drawString("FPS: " + fps, 10, 20);
+    }
+
+    private void renderExplorerMode(Graphics offscreenGraphics) {
+        for (Particle particle : particles) {
+            int offsetX = (int) (particle.x - explorerSprite.x) + getWidth() / 2;
+            int offsetY = (int) (particle.y - explorerSprite.y) + getHeight() / 2;
+
+            if (Math.abs(offsetX) <= getWidth() / 2 && Math.abs(offsetY) <= getHeight() / 2) {
+                offscreenGraphics.fillOval(getWidth() / 2 + offsetX - 5, getHeight() / 2 + offsetY - 5, 10, 10);
+            }
+        }
+
+        offscreenGraphics.setColor(Color.RED);
+        offscreenGraphics.fillOval(getWidth() / 2 - 5, getHeight() / 2 - 5, 10, 10);
     }
 
     void update() {
