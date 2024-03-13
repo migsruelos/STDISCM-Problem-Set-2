@@ -1,7 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-class ParticleSimulator extends JFrame {
+class ParticleSimulator extends JFrame implements KeyListener {
     private Canvas canvas;
 
     ParticleSimulator() {
@@ -36,6 +38,10 @@ class ParticleSimulator extends JFrame {
         });
         buttonPanel.add(particleByVelocityButton);
 
+        JButton switchModeButton = new JButton("Switch Mode (Space)");
+        switchModeButton.addActionListener(e -> toggleMode());
+        buttonPanel.add(switchModeButton);
+
         panel.add(buttonPanel);
         add(panel);
         setSize(1280, 720);
@@ -48,7 +54,28 @@ class ParticleSimulator extends JFrame {
             canvas.update();
         });
         timer.start();
+
+        addKeyListener(this);
+        setFocusable(true);
+        requestFocusInWindow();
     }
+
+    private void toggleMode() {
+        canvas.toggleExplorerMode();
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            toggleMode();
+        }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
 
     public Canvas getCanvas() {
         return canvas;
