@@ -57,6 +57,10 @@ class Canvas extends JPanel implements KeyListener{
         executorService.scheduleAtFixedRate(this::calculateFPS, 0, 500, TimeUnit.MILLISECONDS);
     }
 
+    boolean isExplorerMode() {
+        return explorerMode;
+    }
+
     void toggleExplorerMode() {
         explorerMode = !explorerMode;
         if (explorerMode) {
@@ -71,18 +75,22 @@ class Canvas extends JPanel implements KeyListener{
             int keyCode = e.getKeyCode();
             switch (keyCode) {
                 case KeyEvent.VK_UP:
+                case KeyEvent.VK_W:
                     explorerSprite.velocity = 80;
                     explorerSprite.angle = 0;
                     break;
                 case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_S:
                     explorerSprite.velocity = 80;
                     explorerSprite.angle = 180;
                     break;
                 case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_A:
                     explorerSprite.velocity = 80;
                     explorerSprite.angle = 270;
                     break;
                 case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_D:
                     explorerSprite.velocity = 80;
                     explorerSprite.angle = 90;
                     break;
@@ -124,24 +132,30 @@ class Canvas extends JPanel implements KeyListener{
 
     void addParticles(int n, double startX, double startY, double endX, double endY,
                       double initialAngle, double velocity) {
-        for (int i = 0; i < n; i++) {
-            double randomX = startX + Math.random() * (endX - startX);
-            double randomY = startY + Math.random() * (endY - startY);
-            particles.add(new Particle(randomX, randomY, initialAngle, velocity));
+        if (!explorerMode) { // Only add particles in developer mode
+            for (int i = 0; i < n; i++) {
+                double randomX = startX + Math.random() * (endX - startX);
+                double randomY = startY + Math.random() * (endY - startY);
+                particles.add(new Particle(randomX, randomY, initialAngle, velocity));
+            }
         }
     }
 
     void addParticlesByAngle(int n, double startX, double startY, double velocity, double startAngle, double endAngle) {
-        for (int i = 0; i < n; i++) {
-            double randomAngle = startY + Math.random() * (endAngle - startAngle);
-            particles.add(new Particle(startX, startY, randomAngle, velocity));
+        if (!explorerMode) { // Only add particles in developer mode
+            for (int i = 0; i < n; i++) {
+                double randomAngle = startY + Math.random() * (endAngle - startAngle);
+                particles.add(new Particle(startX, startY, randomAngle, velocity));
+            }
         }
     }
 
     void addParticlesByVelocity(int n, double startX, double startY, double angle, double startVelocity, double endVelocity) {
-        for (int i = 0; i < n; i++) {
-            double randomVelocity = startX + Math.random() * (endVelocity - startVelocity);
-            particles.add(new Particle(startX, startY, angle, randomVelocity));
+        if (!explorerMode) { // Only add particles in developer mode
+            for (int i = 0; i < n; i++) {
+                double randomVelocity = startX + Math.random() * (endVelocity - startVelocity);
+                particles.add(new Particle(startX, startY, angle, randomVelocity));
+            }
         }
     }
 
@@ -177,6 +191,7 @@ class Canvas extends JPanel implements KeyListener{
     }
 
     private void renderExplorerMode(Graphics offscreenGraphics) {
+        // Render particles from developer mode
         for (Particle particle : particles) {
             int offsetX = (int) (particle.x - explorerSprite.x) + getWidth() / 2;
             int offsetY = (int) (particle.y - explorerSprite.y) + getHeight() / 2;
@@ -186,6 +201,17 @@ class Canvas extends JPanel implements KeyListener{
             }
         }
 
+        // Render particles from explorer mode
+        for (Particle particle : explorerParticles) {
+            int offsetX = (int) (particle.x - explorerSprite.x) + getWidth() / 2;
+            int offsetY = (int) (particle.y - explorerSprite.y) + getHeight() / 2;
+
+            if (Math.abs(offsetX) <= getWidth() / 2 && Math.abs(offsetY) <= getHeight() / 2) {
+                offscreenGraphics.fillOval(getWidth() / 2 + offsetX - 5, getHeight() / 2 + offsetY - 5, 10, 10);
+            }
+        }
+
+        // Render explorer sprite
         offscreenGraphics.setColor(Color.RED);
         offscreenGraphics.fillOval(getWidth() / 2 - 5, getHeight() / 2 - 5, 10, 10);
     }
