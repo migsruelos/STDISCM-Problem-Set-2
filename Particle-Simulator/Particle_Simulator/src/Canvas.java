@@ -5,6 +5,10 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 class Particle {
     double x, y; // position
@@ -41,6 +45,8 @@ class Canvas extends JPanel implements KeyListener{
     private boolean explorerMode = false;
     private Particle explorerSprite;
 
+    private BufferedImage spriteImage;
+
     private int frameCount = 0;
     private int fps;
     private long lastFPSTime = System.currentTimeMillis();
@@ -52,6 +58,13 @@ class Canvas extends JPanel implements KeyListener{
         addKeyListener(this);
         setFocusable(true);
         requestFocusInWindow();
+
+        // Load the sprite image
+        try {
+            spriteImage = ImageIO.read(new File("sprite/sprite.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
         executorService.scheduleAtFixedRate(this::calculateFPS, 0, 500, TimeUnit.MILLISECONDS);
@@ -211,9 +224,16 @@ class Canvas extends JPanel implements KeyListener{
             }
         }
 
-        // Render explorer sprite
-        offscreenGraphics.setColor(Color.RED);
-        offscreenGraphics.fillOval(getWidth() / 2 - 5, getHeight() / 2 - 5, 10, 10);
+        // Render the explorer sprite using PNG image
+        if (spriteImage != null) {
+            int spriteX = getWidth() / 2 - spriteImage.getWidth() / 2;
+            int spriteY = getHeight() / 2 - spriteImage.getHeight() / 2;
+            offscreenGraphics.drawImage(spriteImage, spriteX, spriteY, null);
+        } else {
+            // Fallback to rendering a red circle if sprite image is not loaded
+            offscreenGraphics.setColor(Color.RED);
+            offscreenGraphics.fillOval(getWidth() / 2 - 5, getHeight() / 2 - 5, 10, 10);
+        }
     }
 
     void update() {

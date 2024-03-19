@@ -2,6 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 class ParticleSimulator extends JFrame implements KeyListener {
     private Canvas canvas;
@@ -10,7 +14,17 @@ class ParticleSimulator extends JFrame implements KeyListener {
     private JButton particleByAngleButton;
     private JButton particleByVelocityButton;
 
+    private BufferedImage spriteImage;
+
     ParticleSimulator() {
+
+        // Load the sprite image
+        try {
+            spriteImage = ImageIO.read(new File("sprite/sprite.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         setTitle("Particle Simulator");
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
