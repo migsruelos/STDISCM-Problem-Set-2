@@ -39,12 +39,12 @@ class Particle {
     }
 }
 
-class Canvas extends JPanel implements KeyListener{
+class Canvas extends JPanel implements KeyListener {
     private List<Particle> particles;
     private List<Particle> explorerParticles;
     private boolean explorerMode = false;
     private Particle explorerSprite;
-
+    private Particle developerSprite;
     private BufferedImage spriteImage;
 
     private int frameCount = 0;
@@ -61,7 +61,7 @@ class Canvas extends JPanel implements KeyListener{
 
         // Load the sprite image
         try {
-            spriteImage = ImageIO.read(new File("sprite/sprite.png"));
+            spriteImage = ImageIO.read(new File("Particle-Simulator/Particle_Simulator/src/sprite/sprite.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,42 +77,55 @@ class Canvas extends JPanel implements KeyListener{
     void toggleExplorerMode() {
         explorerMode = !explorerMode;
         if (explorerMode) {
-            explorerSprite = new Particle(640, 360, 0, 0);
-            explorerParticles.clear();
+            if (developerSprite != null) {
+                // If switching to explorer mode and developerSprite is not null,
+                // update the explorer sprite's position
+                explorerSprite = new Particle(developerSprite.x, developerSprite.y, 0, 0);
+                explorerParticles.clear();
+            } else {
+                // If developerSprite is null, initialize it to a default position
+                developerSprite = new Particle(640, 360, 0, 0);
+                explorerSprite = new Particle(developerSprite.x, developerSprite.y, 0, 0);
+                explorerParticles.clear();
+            }
+        } else {
+            // If switching back to developer mode, update the developer sprite's position
+            developerSprite = new Particle(explorerSprite.x, explorerSprite.y, 0, 0);
         }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        System.out.println("Key pressed: " + keyCode);
         if (explorerMode) {
-            int keyCode = e.getKeyCode();
+            double speed = 5.0; // Adjust speed as needed
             switch (keyCode) {
                 case KeyEvent.VK_UP:
                 case KeyEvent.VK_W:
-                    explorerSprite.velocity = 80;
-                    explorerSprite.angle = 0;
+                    explorerSprite.y -= speed;
                     break;
                 case KeyEvent.VK_DOWN:
                 case KeyEvent.VK_S:
-                    explorerSprite.velocity = 80;
-                    explorerSprite.angle = 180;
+                    explorerSprite.y += speed;
                     break;
                 case KeyEvent.VK_LEFT:
                 case KeyEvent.VK_A:
-                    explorerSprite.velocity = 80;
-                    explorerSprite.angle = 270;
+                    explorerSprite.x -= speed;
                     break;
                 case KeyEvent.VK_RIGHT:
                 case KeyEvent.VK_D:
-                    explorerSprite.velocity = 80;
-                    explorerSprite.angle = 90;
+                    explorerSprite.x += speed;
                     break;
             }
+            repaint();
         }
     }
 
+
     @Override
-    public void keyTyped(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {
+    }
 
     @Override
     public void keyReleased(KeyEvent e) {
@@ -199,19 +212,38 @@ class Canvas extends JPanel implements KeyListener{
             offscreenGraphics.fillOval((int) particle.x - 5, (int) particle.y - 5, 10, 10);
         }
 
+        if (spriteImage != null) {
+            int scaledWidth = 30;
+            int scaledHeight = 30;
+
+            offscreenGraphics.drawImage(spriteImage, (getWidth() - scaledWidth) / 2, (getHeight() - scaledHeight) / 2, scaledWidth, scaledHeight, null);
+        }
+
         offscreenGraphics.setColor(Color.BLACK);
         offscreenGraphics.drawString("FPS: " + fps, 10, 20);
     }
 
     private void renderExplorerMode(Graphics offscreenGraphics) {
-        // Render particles from developer mode
         for (Particle particle : particles) {
             int offsetX = (int) (particle.x - explorerSprite.x) + getWidth() / 2;
             int offsetY = (int) (particle.y - explorerSprite.y) + getHeight() / 2;
 
             if (Math.abs(offsetX) <= getWidth() / 2 && Math.abs(offsetY) <= getHeight() / 2) {
-                offscreenGraphics.fillOval(getWidth() / 2 + offsetX - 5, getHeight() / 2 + offsetY - 5, 10, 10);
+                // Draw the resized sprite image at the particle's position
+                if (spriteImage != null) {
+                    int scaledWidth = 30; // Adjust as needed
+                    int scaledHeight = 30; // Adjust as needed
+
+                    offscreenGraphics.drawImage(spriteImage, getWidth() / 2 + offsetX - scaledWidth / 2, getHeight() / 2 + offsetY - scaledHeight / 2, scaledWidth, scaledHeight, null);
+                }
             }
+        }
+
+        if (spriteImage != null) {
+            int scaledWidth = 30;
+            int scaledHeight = 30;
+
+            offscreenGraphics.drawImage(spriteImage, (getWidth() - scaledWidth) / 2, (getHeight() - scaledHeight) / 2, scaledWidth, scaledHeight, null);
         }
 
         // Render particles from explorer mode
@@ -222,17 +254,6 @@ class Canvas extends JPanel implements KeyListener{
             if (Math.abs(offsetX) <= getWidth() / 2 && Math.abs(offsetY) <= getHeight() / 2) {
                 offscreenGraphics.fillOval(getWidth() / 2 + offsetX - 5, getHeight() / 2 + offsetY - 5, 10, 10);
             }
-        }
-
-        // Render the explorer sprite using PNG image
-        if (spriteImage != null) {
-            int spriteX = getWidth() / 2 - spriteImage.getWidth() / 2;
-            int spriteY = getHeight() / 2 - spriteImage.getHeight() / 2;
-            offscreenGraphics.drawImage(spriteImage, spriteX, spriteY, null);
-        } else {
-            // Fallback to rendering a red circle if sprite image is not loaded
-            offscreenGraphics.setColor(Color.RED);
-            offscreenGraphics.fillOval(getWidth() / 2 - 5, getHeight() / 2 - 5, 10, 10);
         }
     }
 

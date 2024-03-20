@@ -18,19 +18,14 @@ class ParticleSimulator extends JFrame implements KeyListener {
 
     ParticleSimulator() {
 
-        // Load the sprite image
-        try {
-            spriteImage = ImageIO.read(new File("sprite/sprite.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         setTitle("Particle Simulator");
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
         canvas = new Canvas();
         panel.add(canvas);
+
+        loadSpriteImage();
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
@@ -76,8 +71,15 @@ class ParticleSimulator extends JFrame implements KeyListener {
         addKeyListener(this);
         setFocusable(true);
         requestFocusInWindow();
-    }
 
+    }
+    private void loadSpriteImage() {
+        try {
+            spriteImage = ImageIO.read(new File("Particle-Simulator/Particle_Simulator/src/sprite/sprite.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void toggleMode() {
         canvas.toggleExplorerMode();
