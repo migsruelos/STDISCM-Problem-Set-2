@@ -11,6 +11,9 @@ class Particle {
     double angle; // angle in degrees
     double velocity; // velocity in pixels per second
 
+    private final int WIDTH = 1280;
+    private final int HEIGHT = 720;
+
     Particle(double x, double y, double angle, double velocity) {
         this.x = x;
         this.y = y;
@@ -26,10 +29,10 @@ class Particle {
         y = newY;
 
         // check collision on borders
-        if (newX < 0 || newX > 1260) {
+        if (newX < 0 || newX > WIDTH) {
             angle = 180 - angle;
         }
-        if (newY < 0 || newY > 680) {
+        if (newY < 0 || newY > HEIGHT) {
             angle = -angle;
         }
     }
@@ -47,6 +50,8 @@ class Canvas extends JPanel implements KeyListener{
 
     private final int WIDTH = 1280;
     private final int HEIGHT = 720;
+
+    private JFrame frame;
 
     Canvas() {
         particles = new ArrayList<>();
@@ -103,12 +108,15 @@ class Canvas extends JPanel implements KeyListener{
         }
     }
 
+    public void passFrame(JFrame f){
+        frame = f;
+    }
 
     private void updateFPS() {
         fps = frameCount * 2;
         frameCount = 0;
         lastFPSTime = System.currentTimeMillis();
-        repaint();
+        frame.setTitle("Particle Simulator | FPS: " + calculateFPS());
     }
 
     private int calculateFPS() {
@@ -165,8 +173,8 @@ class Canvas extends JPanel implements KeyListener{
             renderDeveloperMode(offscreenGraphics);
         }
 
-        offscreenGraphics.setColor(Color.WHITE);
-        offscreenGraphics.drawString("FPS: " + calculateFPS(), 10, 20);
+        //IDK why but this is needed for more accurate fps measurement???
+        calculateFPS();
 
         g.drawImage(offscreen, 0, 0, this);
     }
@@ -178,9 +186,6 @@ class Canvas extends JPanel implements KeyListener{
         for (Particle particle : particles) {
             offscreenGraphics.fillOval((int) particle.x - 5, (int) particle.y - 5, 10, 10);
         }
-
-        offscreenGraphics.setColor(Color.BLACK);
-        offscreenGraphics.drawString("FPS: " + fps, 10, 20);
     }
 
     private void renderExplorerMode(Graphics g) {

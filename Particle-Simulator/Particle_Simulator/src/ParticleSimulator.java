@@ -10,12 +10,13 @@ class ParticleSimulator extends JFrame implements KeyListener {
     public static final int FRAME_HEIGHT = 900;
 
     ParticleSimulator() {
-        setTitle("Particle Simulator");
+        setTitle("Particle Simulator | FPS: 0");
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(FRAME_HEIGHT/2-325, 100, 0,0));
 
         canvas = new Canvas();
+        canvas.passFrame(this);
         panel.add(canvas);
 
         JPanel buttonPanel = new JPanel();
