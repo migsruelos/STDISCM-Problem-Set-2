@@ -45,10 +45,13 @@ class Canvas extends JPanel implements KeyListener{
     private int fps;
     private long lastFPSTime = System.currentTimeMillis();
 
+    private final int WIDTH = 1280;
+    private final int HEIGHT = 720;
+
     Canvas() {
         particles = new ArrayList<>();
         explorerParticles = new ArrayList<>();
-        setPreferredSize(new Dimension(1280, 720));
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
         addKeyListener(this);
         setFocusable(true);
         requestFocusInWindow();
@@ -150,7 +153,9 @@ class Canvas extends JPanel implements KeyListener{
         super.paintComponent(g);
 
         Image offscreen = createImage(getWidth(), getHeight());
-        Graphics offscreenGraphics = offscreen.getGraphics();
+        Graphics2D offscreenGraphics = (Graphics2D) offscreen.getGraphics();
+        offscreenGraphics.setColor(Color.BLACK);
+        offscreenGraphics.fillRect(0,0, WIDTH, HEIGHT);
 
         if (explorerMode) {
             // Render explorer mode
@@ -160,13 +165,15 @@ class Canvas extends JPanel implements KeyListener{
             renderDeveloperMode(offscreenGraphics);
         }
 
-        offscreenGraphics.setColor(Color.BLACK);
+        offscreenGraphics.setColor(Color.WHITE);
         offscreenGraphics.drawString("FPS: " + calculateFPS(), 10, 20);
 
         g.drawImage(offscreen, 0, 0, this);
     }
 
-    private void renderDeveloperMode(Graphics offscreenGraphics) {
+    private void renderDeveloperMode(Graphics g) {
+        Graphics2D offscreenGraphics = (Graphics2D) g;
+
         offscreenGraphics.setColor(Color.GREEN);
         for (Particle particle : particles) {
             offscreenGraphics.fillOval((int) particle.x - 5, (int) particle.y - 5, 10, 10);
@@ -176,7 +183,8 @@ class Canvas extends JPanel implements KeyListener{
         offscreenGraphics.drawString("FPS: " + fps, 10, 20);
     }
 
-    private void renderExplorerMode(Graphics offscreenGraphics) {
+    private void renderExplorerMode(Graphics g) {
+        Graphics2D offscreenGraphics = (Graphics2D) g;
         for (Particle particle : particles) {
             int offsetX = (int) (particle.x - explorerSprite.x) + getWidth() / 2;
             int offsetY = (int) (particle.y - explorerSprite.y) + getHeight() / 2;

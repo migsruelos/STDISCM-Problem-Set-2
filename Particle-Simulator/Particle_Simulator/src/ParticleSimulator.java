@@ -6,16 +6,21 @@ import java.awt.event.KeyListener;
 class ParticleSimulator extends JFrame implements KeyListener {
     private Canvas canvas;
 
+    public static final int FRAME_WIDTH = 1600;
+    public static final int FRAME_HEIGHT = 900;
+
     ParticleSimulator() {
         setTitle("Particle Simulator");
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(FRAME_HEIGHT/2-325, 100, 0,0));
 
         canvas = new Canvas();
         panel.add(canvas);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 300,250));
 
         JButton particleByDistanceButton = new JButton("Add Particle (Distance)");
         particleByDistanceButton.addActionListener(e -> {
@@ -44,9 +49,10 @@ class ParticleSimulator extends JFrame implements KeyListener {
 
         panel.add(buttonPanel);
         add(panel);
-        setSize(1280, 720);
+        setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         setVisible(true);
 
         // timer to update the canvas on the EDT
