@@ -214,7 +214,7 @@ class ParticleByAngleInputDialog extends JDialog {
 
             // add particles to canvas
             Canvas canvas = ((ParticleSimulator) getParent()).getCanvas();
-            canvas.addParticlesByAngle(particleCount, 100, 100, 80, startAngle, endAngle);
+            canvas.addParticlesByAngle(particleCount, 100, 100, 80, -startAngle, -endAngle);
 
             // close the dialog
             setVisible(false);
