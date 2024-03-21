@@ -12,6 +12,8 @@ class Canvas extends JPanel implements KeyListener{
     private boolean explorerMode = false;
     private Particle explorerSprite;
 
+    private BufferedImage spriteImage;
+
     private int frameCount = 0;
     private int fps;
     private long lastFPSTime = System.currentTimeMillis();
@@ -24,13 +26,24 @@ class Canvas extends JPanel implements KeyListener{
     Canvas() {
         particles = new ArrayList<>();
         explorerParticles = new ArrayList<>();
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        setPreferredSize(new Dimension(1280, 720));
         addKeyListener(this);
         setFocusable(true);
         requestFocusInWindow();
 
+        // Load the sprite image
+        try {
+            spriteImage = ImageIO.read(new File("sprite/sprite.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
         executorService.scheduleAtFixedRate(this::calculateFPS, 0, 500, TimeUnit.MILLISECONDS);
+    }
+
+    boolean isExplorerMode() {
+        return explorerMode;
     }
 
     void toggleExplorerMode() {
