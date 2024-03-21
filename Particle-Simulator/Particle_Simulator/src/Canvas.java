@@ -20,10 +20,8 @@ class Canvas extends JPanel implements KeyListener{
     private int frameCount = 0;
     private int fps;
     private long lastFPSTime = System.currentTimeMillis();
-
     private final int WIDTH = 1280;
     private final int HEIGHT = 720;
-
     private JFrame frame;
 
     Canvas() {
@@ -69,24 +67,29 @@ class Canvas extends JPanel implements KeyListener{
         }
     }
 
+
     @Override
     public void keyPressed(KeyEvent e) {
         if (explorerMode) {
             int keyCode = e.getKeyCode();
             switch (keyCode) {
                 case KeyEvent.VK_UP:
+                case KeyEvent.VK_W:
                     explorerSprite.velocity = 80;
                     explorerSprite.angle = 0;
                     break;
                 case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_S:
                     explorerSprite.velocity = 80;
                     explorerSprite.angle = 180;
                     break;
                 case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_A:
                     explorerSprite.velocity = 80;
                     explorerSprite.angle = 270;
                     break;
                 case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_D:
                     explorerSprite.velocity = 80;
                     explorerSprite.angle = 90;
                     break;
@@ -140,7 +143,7 @@ class Canvas extends JPanel implements KeyListener{
 
     void addParticlesByAngle(int n, double startX, double startY, double velocity, double startAngle, double endAngle) {
         for (int i = 0; i < n; i++) {
-            double randomAngle = startY + Math.random() * (endAngle - startAngle);
+            double randomAngle = startAngle + Math.random() * (endAngle - startAngle);
             particles.add(new Particle(startX, startY, randomAngle, velocity));
         }
     }
@@ -222,7 +225,6 @@ class Canvas extends JPanel implements KeyListener{
             }
         }
     }
-
 
     void update() {
         calculateFPS();

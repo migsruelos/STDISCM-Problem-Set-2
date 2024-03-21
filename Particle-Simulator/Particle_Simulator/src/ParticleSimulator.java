@@ -56,7 +56,6 @@ class ParticleSimulator extends JFrame implements KeyListener {
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         setVisible(true);
 
-        // timer to update the canvas on the EDT
         Timer timer = new Timer(15, e -> {
             canvas.update();
         });
