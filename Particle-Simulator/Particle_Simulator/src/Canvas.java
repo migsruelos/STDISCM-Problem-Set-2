@@ -5,6 +5,10 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 class Canvas extends JPanel implements KeyListener{
     private List<Particle> particles;
