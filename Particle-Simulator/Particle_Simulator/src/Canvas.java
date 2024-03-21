@@ -27,7 +27,7 @@ class Canvas extends JPanel implements KeyListener{
     Canvas() {
         particles = new ArrayList<>();
         explorerParticles = new ArrayList<>();
-        setPreferredSize(new Dimension(1280, 720));
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
         addKeyListener(this);
         setFocusable(true);
         requestFocusInWindow();
