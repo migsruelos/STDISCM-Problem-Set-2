@@ -5,6 +5,10 @@ import java.awt.event.KeyListener;
 
 class ParticleSimulator extends JFrame implements KeyListener {
     private Canvas canvas;
+    private JButton switchModeButton;
+    private JButton particleByDistanceButton;
+    private JButton particleByAngleButton;
+    private JButton particleByVelocityButton;
 
     public static final int FRAME_WIDTH = 1600;
     public static final int FRAME_HEIGHT = 900;
@@ -13,7 +17,7 @@ class ParticleSimulator extends JFrame implements KeyListener {
         setTitle("Particle Simulator | FPS: 0");
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-        panel.setBorder(BorderFactory.createEmptyBorder(FRAME_HEIGHT/2-325, 100, 0,0));
+        panel.setBorder(BorderFactory.createEmptyBorder(FRAME_HEIGHT / 2 - 325, 100, 0, 0));
 
         canvas = new Canvas();
         canvas.passFrame(this);
@@ -21,31 +25,30 @@ class ParticleSimulator extends JFrame implements KeyListener {
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 300,250));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 300, 250));
 
-        JButton particleByDistanceButton = new JButton("Add Particle (Distance)");
+        particleByDistanceButton = new JButton("Add Particle (Distance)");
         particleByDistanceButton.addActionListener(e -> {
             ParticleByDistanceInputDialog particleByDistanceDialog = new ParticleByDistanceInputDialog(this);
             particleByDistanceDialog.setVisible(true);
         });
-        buttonPanel.add(particleByDistanceButton);
-
-        JButton particleByAngleButton = new JButton("Add Particle (Angle)");
+        particleByAngleButton = new JButton("Add Particle (Angle)");
         particleByAngleButton.addActionListener(e -> {
             ParticleByAngleInputDialog particleByAngleDialog = new ParticleByAngleInputDialog(this);
             particleByAngleDialog.setVisible(true);
         });
-        buttonPanel.add(particleByAngleButton);
-
-        JButton particleByVelocityButton = new JButton("Add Particle (Velocity)");
+        particleByVelocityButton = new JButton("Add Particle (Velocity)");
         particleByVelocityButton.addActionListener(e -> {
             ParticleByVelocityInputDialog particleByVelocityDialog = new ParticleByVelocityInputDialog(this);
             particleByVelocityDialog.setVisible(true);
         });
-        buttonPanel.add(particleByVelocityButton);
 
-        JButton switchModeButton = new JButton("Switch Mode (Space)");
+        switchModeButton = new JButton("Switch Mode (Space)");
         switchModeButton.addActionListener(e -> toggleMode());
+
+        buttonPanel.add(particleByDistanceButton);
+        buttonPanel.add(particleByAngleButton);
+        buttonPanel.add(particleByVelocityButton);
         buttonPanel.add(switchModeButton);
 
         panel.add(buttonPanel);
@@ -68,6 +71,14 @@ class ParticleSimulator extends JFrame implements KeyListener {
 
     private void toggleMode() {
         canvas.toggleExplorerMode();
+        
+        boolean explorerMode = canvas.isExplorerMode();
+        particleByDistanceButton.setEnabled(!explorerMode);
+        particleByDistanceButton.setVisible(!explorerMode);
+        particleByAngleButton.setEnabled(!explorerMode);
+        particleByAngleButton.setVisible(!explorerMode);
+        particleByVelocityButton.setEnabled(!explorerMode);
+        particleByVelocityButton.setVisible(!explorerMode);
     }
 
     @Override
