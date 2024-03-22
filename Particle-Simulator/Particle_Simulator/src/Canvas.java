@@ -119,7 +119,11 @@ class Canvas extends JPanel implements KeyListener{
         fps = frameCount * 2;
         frameCount = 0;
         lastFPSTime = System.currentTimeMillis();
-        frame.setTitle("Particle Simulator | FPS: " + calculateFPS());
+        if(!explorerSpawned)
+            frame.setTitle("Particle Simulator | FPS: " + calculateFPS());
+        else
+            frame.setTitle("Particle Simulator | FPS: " + calculateFPS() + " | X: "
+            + explorerSprite.x + " Y: " + explorerSprite.y);
     }
 
     private int calculateFPS() {

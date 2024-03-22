@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d33e78af-dc87-4a0b-9a8c-51f119bf33f7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Particle-Simulator/Particle_Simulator/src/Canvas.java" beforeDir="false" afterPath="$PROJECT_DIR$/Particle-Simulator/Particle_Simulator/src/Canvas.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Particle-Simulator/Particle_Simulator/src/ParticleSimulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/Particle-Simulator/Particle_Simulator/src/ParticleSimulator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/STDISCM-Problem-Set-2/Canvas.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/STDISCM-Problem-Set-2/Canvas.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/STDISCM-Problem-Set-2/ParticleByAngleInputDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/STDISCM-Problem-Set-2/ParticleByAngleInputDialog.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/STDISCM-Problem-Set-2/ParticleByDistanceInputDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/STDISCM-Problem-Set-2/ParticleByDistanceInputDialog.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/STDISCM-Problem-Set-2/ParticleByVelocityInputDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/STDISCM-Problem-Set-2/ParticleByVelocityInputDialog.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
