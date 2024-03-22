@@ -54,20 +54,7 @@ class Canvas extends JPanel implements KeyListener{
     void toggleExplorerMode() {
         explorerMode = !explorerMode;
         if (explorerMode) {
-            if (developerSprite != null) {
-                // If switching to explorer mode and developerSprite is not null,
-                // update the explorer sprite's position
-                explorerSprite = new Particle(developerSprite.x, developerSprite.y, 0, 0);
-                explorerParticles.clear();
-            } else {
-                // If developerSprite is null, initialize it to a default position
-                developerSprite = new Particle(640, 360, 0, 0);
-                explorerSprite = new Particle(developerSprite.x, developerSprite.y, 0, 0);
-                explorerParticles.clear();
-            }
-        } else {
-            // If switching back to developer mode, update the developer sprite's position
-            developerSprite = new Particle(explorerSprite.x, explorerSprite.y, 0, 0);
+            explorerSprite = new Particle(WIDTH / 2, HEIGHT / 2, 0, 0);
         }
     }
 
@@ -79,25 +66,22 @@ class Canvas extends JPanel implements KeyListener{
             switch (keyCode) {
                 case KeyEvent.VK_UP:
                 case KeyEvent.VK_W:
-                    explorerSprite.velocity = 80;
-                    explorerSprite.angle = 0;
+                    explorerSprite.y -= 5;
                     break;
                 case KeyEvent.VK_DOWN:
                 case KeyEvent.VK_S:
-                    explorerSprite.velocity = 80;
-                    explorerSprite.angle = 180;
+                    explorerSprite.y += 5;
                     break;
                 case KeyEvent.VK_LEFT:
                 case KeyEvent.VK_A:
-                    explorerSprite.velocity = 80;
-                    explorerSprite.angle = 270;
+                    explorerSprite.x -= 5;
                     break;
                 case KeyEvent.VK_RIGHT:
                 case KeyEvent.VK_D:
-                    explorerSprite.velocity = 80;
-                    explorerSprite.angle = 90;
+                    explorerSprite.x += 5;
                     break;
             }
+            repaint();
         }
     }
 
@@ -105,11 +89,7 @@ class Canvas extends JPanel implements KeyListener{
     public void keyTyped(KeyEvent e) {}
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        if (explorerMode) {
-            explorerSprite.velocity = 0;
-        }
-    }
+    public void keyReleased(KeyEvent e) {}
 
     public void passFrame(JFrame f){
         frame = f;
@@ -138,24 +118,30 @@ class Canvas extends JPanel implements KeyListener{
 
     void addParticles(int n, double startX, double startY, double endX, double endY,
                       double initialAngle, double velocity) {
-        for (int i = 0; i < n; i++) {
-            double randomX = startX + Math.random() * (endX - startX);
-            double randomY = startY + Math.random() * (endY - startY);
-            particles.add(new Particle(randomX, randomY, initialAngle, velocity));
+        if (!explorerMode) {
+            for (int i = 0; i < n; i++) {
+                double randomX = startX + Math.random() * (endX - startX);
+                double randomY = startY + Math.random() * (endY - startY);
+                particles.add(new Particle(randomX, randomY, initialAngle, velocity));
+            }
         }
     }
 
     void addParticlesByAngle(int n, double startX, double startY, double velocity, double startAngle, double endAngle) {
-        for (int i = 0; i < n; i++) {
-            double randomAngle = startAngle + Math.random() * (endAngle - startAngle);
-            particles.add(new Particle(startX, startY, randomAngle, velocity));
+        if (!explorerMode) {
+            for (int i = 0; i < n; i++) {
+                double randomAngle = startAngle + Math.random() * (endAngle - startAngle);
+                particles.add(new Particle(startX, startY, randomAngle, velocity));
+            }
         }
     }
 
     void addParticlesByVelocity(int n, double startX, double startY, double angle, double startVelocity, double endVelocity) {
-        for (int i = 0; i < n; i++) {
-            double randomVelocity = startX + Math.random() * (endVelocity - startVelocity);
-            particles.add(new Particle(startX, startY, angle, randomVelocity));
+        if(!explorerMode) {
+            for (int i = 0; i < n; i++) {
+                double randomVelocity = startX + Math.random() * (endVelocity - startVelocity);
+                particles.add(new Particle(startX, startY, angle, randomVelocity));
+            }
         }
     }
 
@@ -169,10 +155,8 @@ class Canvas extends JPanel implements KeyListener{
         offscreenGraphics.fillRect(0,0, WIDTH, HEIGHT);
 
         if (explorerMode) {
-            // Render explorer mode
             renderExplorerMode(offscreenGraphics);
         } else {
-            // Render developer mode
             renderDeveloperMode(offscreenGraphics);
         }
 
@@ -187,43 +171,34 @@ class Canvas extends JPanel implements KeyListener{
         for (Particle particle : particles) {
             offscreenGraphics.fillOval((int) particle.x - 5, (int) particle.y - 5, 10, 10);
         }
-
-        if (spriteImage != null) {
-            int scaledWidth = 30;
-            int scaledHeight = 30;
-
-            offscreenGraphics.drawImage(spriteImage, (getWidth() - scaledWidth) / 2, (getHeight() - scaledHeight) / 2, scaledWidth, scaledHeight, null);
-        }
     }
 
-    private void renderExplorerMode(Graphics offscreenGraphics) {
+    private void renderExplorerMode(Graphics g) {
         // Calculate the bounds of the periphery
-        int peripheryLeft = getWidth() / 2 - PERIPHERY_WIDTH / 2 * PARTICLE_SIZE;
-        int peripheryTop = getHeight() / 2 - PERIPHERY_HEIGHT / 2 * PARTICLE_SIZE;
-        int peripheryRight = getWidth() / 2 + PERIPHERY_WIDTH / 2 * PARTICLE_SIZE;
-        int peripheryBottom = getHeight() / 2 + PERIPHERY_HEIGHT / 2 * PARTICLE_SIZE;
+        int peripheryLeft = (int) (explorerSprite.x - PERIPHERY_WIDTH / 2 * PARTICLE_SIZE);
+        int peripheryTop = (int) (explorerSprite.y - PERIPHERY_HEIGHT / 2 * PARTICLE_SIZE);
+        int peripheryRight = peripheryLeft + PERIPHERY_WIDTH * PARTICLE_SIZE;
+        int peripheryBottom = peripheryTop + PERIPHERY_HEIGHT * PARTICLE_SIZE;
 
-        // Render particles from explorer mode
+        // Render particles within the sprite's periphery
+        g.setColor(Color.GREEN);
         for (Particle particle : particles) {
-            int offsetX = (int) (particle.x - explorerSprite.x) + getWidth() / 2;
-            int offsetY = (int) (particle.y - explorerSprite.y) + getHeight() / 2;
+            int offsetX = (int) (particle.x - explorerSprite.x) + WIDTH / 2;
+            int offsetY = (int) (particle.y - explorerSprite.y) + HEIGHT / 2;
 
-            if (Math.abs(offsetX) <= getWidth() / 2 && Math.abs(offsetY) <= getHeight() / 2) {
-                // Check if the particle is within the periphery bounds
-                if (offsetX >= -PERIPHERY_WIDTH / 2 * PARTICLE_SIZE && offsetX <= PERIPHERY_WIDTH / 2 * PARTICLE_SIZE &&
-                        offsetY >= -PERIPHERY_HEIGHT / 2 * PARTICLE_SIZE && offsetY <= PERIPHERY_HEIGHT / 2 * PARTICLE_SIZE) {
-                    // Render the particle within the periphery
-                    offscreenGraphics.fillOval(getWidth() / 2 + offsetX - PARTICLE_SIZE / 2, getHeight() / 2 + offsetY - PARTICLE_SIZE / 2, PARTICLE_SIZE, PARTICLE_SIZE);
-                }
+            // Check if the particle is within the periphery bounds
+            if (offsetX >= peripheryLeft && offsetX <= peripheryRight &&
+                    offsetY >= peripheryTop && offsetY <= peripheryBottom) {
+                g.fillOval(WIDTH / 2 + offsetX - 5, HEIGHT / 2 + offsetY - 5, 10, 10);
             }
         }
 
-        // Draw the explorer sprite in the center
-        offscreenGraphics.drawImage(spriteImage, getWidth() / 2 - SPRITE_SIZE / 2, getHeight() / 2 - SPRITE_SIZE / 2, SPRITE_SIZE, SPRITE_SIZE, null);
-
-        // Draw the periphery boundaries
-        offscreenGraphics.setColor(Color.RED);
-        offscreenGraphics.drawRect(peripheryLeft, peripheryTop, PERIPHERY_WIDTH * PARTICLE_SIZE, PERIPHERY_HEIGHT * PARTICLE_SIZE);
+        // Render sprite image centered in the periphery
+        if (spriteImage != null) {
+            int spriteX = WIDTH / 2 - SPRITE_SIZE / 2;
+            int spriteY = HEIGHT / 2 - SPRITE_SIZE / 2;
+            g.drawImage(spriteImage, spriteX, spriteY, SPRITE_SIZE, SPRITE_SIZE, null);
+        }
     }
 
 
