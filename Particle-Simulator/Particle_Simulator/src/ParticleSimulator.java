@@ -18,10 +18,16 @@ class ParticleSimulator extends JFrame implements KeyListener {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(40, 20, 0, 0));
-
         canvas = new Canvas();
         canvas.passFrame(this);
+
+        canvas.addKeyHandler(this);
+
         panel.add(canvas);
+
+        addKeyListener(this);
+        setFocusable(true);
+        requestFocusInWindow();
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
@@ -63,10 +69,6 @@ class ParticleSimulator extends JFrame implements KeyListener {
             canvas.update();
         });
         timer.start();
-
-        addKeyListener(this);
-        setFocusable(true);
-        requestFocusInWindow();
     }
 
     private void toggleMode() {

@@ -28,6 +28,7 @@ class Canvas extends JPanel implements KeyListener{
     private final int PARTICLE_SIZE = 10;
     private JFrame frame;
 
+
     Canvas() {
         particles = new ArrayList<>();
         explorerParticles = new ArrayList<>();
@@ -58,7 +59,13 @@ class Canvas extends JPanel implements KeyListener{
         }
     }
 
-
+    public void moveExplorerSprite(int dx, int dy) {
+        if (explorerSprite != null) {
+            explorerSprite.x += dx;
+            explorerSprite.y += dy;
+            repaint();
+        }
+    }
     @Override
     public void keyPressed(KeyEvent e) {
         if (explorerMode) {
@@ -66,30 +73,34 @@ class Canvas extends JPanel implements KeyListener{
             switch (keyCode) {
                 case KeyEvent.VK_UP:
                 case KeyEvent.VK_W:
-                    explorerSprite.y -= 5;
+                    moveExplorerSprite(0, -5);
                     break;
                 case KeyEvent.VK_DOWN:
                 case KeyEvent.VK_S:
-                    explorerSprite.y += 5;
+                    moveExplorerSprite(0, 5);
                     break;
                 case KeyEvent.VK_LEFT:
                 case KeyEvent.VK_A:
-                    explorerSprite.x -= 5;
+                    moveExplorerSprite(-5, 0);
                     break;
                 case KeyEvent.VK_RIGHT:
                 case KeyEvent.VK_D:
-                    explorerSprite.x += 5;
+                    moveExplorerSprite(5, 0);
                     break;
             }
-            repaint();
         }
     }
+
 
     @Override
     public void keyTyped(KeyEvent e) {}
 
     @Override
     public void keyReleased(KeyEvent e) {}
+
+    public void addKeyHandler(JFrame frame) {
+        frame.addKeyListener(this);
+    }
 
     public void passFrame(JFrame f){
         frame = f;
