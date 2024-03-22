@@ -5,6 +5,7 @@ This is a particle simulation application that operates in two modes: Developer 
 # Requirements
 
 * Java 8 or higher.
+* SDK 21
 * A screen resolution capable of displaying 1280x720 pixels.
 
 # Usage
