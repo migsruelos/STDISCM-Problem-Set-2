@@ -19,10 +19,13 @@ This is a particle simulation application that operates in two modes: Developer 
       * The X and Y inputs from the user are read as pixel coordinates.
       * When adding particles using methods addParticles, addParticlesByAngle, and addParticlesByVelocity, the angle parameter represents the initial angle of the particle in degrees.
       * Parameters startX and startY specify the minimum pixel coordinates for the starting position of the particles, while endX and endY specify the pixel coordinates for the ending position.
-      
-    * The fourth button is for switching mode from developer mode to explorer mode and back
-      * This button can also used by pressing space on the keyboard.
-      
-  * Once the user has inputted their desired value, it will be visible to the user on the canvas after adding the submit button.
 
-  * In explorer mode, a sprite is spawned in a space, controlled using WASD keys, or arrow keys. The canvas transforms into a zoomed-in version of the sprite's periphery, with 19 rows by 33 columns. As the sprite moves, any balls enter it must be rendered in motion.
+    * Once the user has inputted their desired value, it will be visible to the user on the canvas after adding the submit button.
+
+    * The fourth button is for switching mode from developer mode to explorer mode
+      * This button can also used by pressing space on the keyboard.
+
+  * In explorer mode, one button and the canvas for the simulation will be presented.
+    * The button can also used by pressing space on the keyboard.
+      
+    * A sprite is spawned in a space and is controlled using WASD keys or arrow keys.
