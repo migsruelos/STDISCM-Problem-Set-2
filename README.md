@@ -12,20 +12,21 @@ This is a particle simulation application that operates in two modes: Developer 
 * Run the JAR file
   * This will open a window with 1280 x 720 pixel canvas. The coordinates (0, 0) are the southwest corner of the canvas, and the coordinates (1280, 720) are the northeast corner.
     
-* In the window, the user will start off in developer mode
+* In the window, the user will start off in developer mode.
   * In developer mode, four buttons and the canvas for the simulation will be presented.
   
-    * Three of the buttons are for the user to add particles
+    * Three of the buttons are for the user to add particles.
       * The X and Y inputs from the user are read as pixel coordinates.
       * When adding particles using methods addParticles, addParticlesByAngle, and addParticlesByVelocity, the angle parameter represents the initial angle of the particle in degrees.
       * Parameters startX and startY specify the minimum pixel coordinates for the starting position of the particles, while endX and endY specify the pixel coordinates for the ending position.
 
     * Once the user has inputted their desired value, it will be visible to the user on the canvas after adding the submit button.
 
-    * The fourth button is for switching mode from developer mode to explorer mode
+    * The fourth button is for switching mode from developer mode to explorer mode.
       * This button can also used by pressing space on the keyboard.
 
   * In explorer mode, one button and the canvas for the simulation will be presented.
-    * The button can also used by pressing space on the keyboard.
+    * The button is for switching mode from explorer mode to developer mode.
+      * The button can also used by pressing space on the keyboard.
       
     * A sprite is spawned in a space and is controlled using WASD keys or arrow keys.
