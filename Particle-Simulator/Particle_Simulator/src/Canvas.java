@@ -27,6 +27,7 @@ class Canvas extends JPanel implements KeyListener{
     private final int SPRITE_SIZE = 30;
     private final int PARTICLE_SIZE = 10;
     private JFrame frame;
+    private boolean explorerSpawned = false;
 
 
     Canvas() {
@@ -54,8 +55,9 @@ class Canvas extends JPanel implements KeyListener{
 
     void toggleExplorerMode() {
         explorerMode = !explorerMode;
-        if (explorerMode) {
+        if (!explorerSpawned) {
             explorerSprite = new Particle(WIDTH / 2 - SPRITE_SIZE / 2, HEIGHT / 2 - SPRITE_SIZE / 2, 0, 0);
+            explorerSpawned = true;
         }
     }
 
@@ -63,7 +65,7 @@ class Canvas extends JPanel implements KeyListener{
         if (explorerSprite != null) {
             explorerSprite.x += dx;
             explorerSprite.y += dy;
-            repaint();
+            //repaint();
         }
     }
     @Override
@@ -190,6 +192,13 @@ class Canvas extends JPanel implements KeyListener{
         for (Particle particle : particles) {
             offscreenGraphics.fillOval((int) particle.x - 5, (int) particle.y - 5, 10, 10);
         }
+
+        //Render sprite in actual location if spawned
+        if (explorerSpawned && spriteImage != null) {
+            int spriteX = (int) explorerSprite.x - SPRITE_SIZE / 2;
+            int spriteY = (int) explorerSprite.y - SPRITE_SIZE / 2;
+            offscreenGraphics.drawImage(spriteImage, spriteX, spriteY, SPRITE_SIZE, SPRITE_SIZE, null);
+        }
     }
 
     private void renderExplorerMode(Graphics g) {
@@ -219,10 +228,10 @@ class Canvas extends JPanel implements KeyListener{
         }
 
         // Render sprite image centered in the periphery
-        if (spriteImage != null) {
-            int spriteX = (int) explorerSprite.x - SPRITE_SIZE / 2;
-            int spriteY = (int) explorerSprite.y - SPRITE_SIZE / 2;
-            g.drawImage(spriteImage, spriteX, spriteY, SPRITE_SIZE, SPRITE_SIZE, null);
+        if (explorerSpawned && spriteImage != null) {
+            //Render this in center at all times
+            g.drawImage(spriteImage, WIDTH / 2 - SPRITE_SIZE / 2, HEIGHT / 2 - SPRITE_SIZE / 2,
+                    SPRITE_SIZE, SPRITE_SIZE, null);
         }
     }
 
