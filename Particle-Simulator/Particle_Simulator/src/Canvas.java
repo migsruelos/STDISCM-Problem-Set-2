@@ -55,7 +55,7 @@ class Canvas extends JPanel implements KeyListener{
     void toggleExplorerMode() {
         explorerMode = !explorerMode;
         if (explorerMode) {
-            explorerSprite = new Particle(WIDTH / 2, HEIGHT / 2, 0, 0);
+            explorerSprite = new Particle(WIDTH / 2 - SPRITE_SIZE / 2, HEIGHT / 2 - SPRITE_SIZE / 2, 0, 0);
         }
     }
 
@@ -73,19 +73,27 @@ class Canvas extends JPanel implements KeyListener{
             switch (keyCode) {
                 case KeyEvent.VK_UP:
                 case KeyEvent.VK_W:
-                    moveExplorerSprite(0, -5);
+                    if (explorerSprite.y - SPRITE_SIZE > 0) {
+                        moveExplorerSprite(0, -5);
+                    }
                     break;
                 case KeyEvent.VK_DOWN:
                 case KeyEvent.VK_S:
-                    moveExplorerSprite(0, 5);
+                    if (explorerSprite.y + SPRITE_SIZE < HEIGHT) {
+                        moveExplorerSprite(0, 5);
+                    }
                     break;
                 case KeyEvent.VK_LEFT:
                 case KeyEvent.VK_A:
-                    moveExplorerSprite(-5, 0);
+                    if (explorerSprite.x - SPRITE_SIZE > 0) {
+                        moveExplorerSprite(-5, 0);
+                    }
                     break;
                 case KeyEvent.VK_RIGHT:
                 case KeyEvent.VK_D:
-                    moveExplorerSprite(5, 0);
+                    if (explorerSprite.x + SPRITE_SIZE < WIDTH) {
+                        moveExplorerSprite(5, 0);
+                    }
                     break;
             }
         }
@@ -206,8 +214,8 @@ class Canvas extends JPanel implements KeyListener{
 
         // Render sprite image centered in the periphery
         if (spriteImage != null) {
-            int spriteX = WIDTH / 2 - SPRITE_SIZE / 2;
-            int spriteY = HEIGHT / 2 - SPRITE_SIZE / 2;
+            int spriteX = (int) explorerSprite.x  - SPRITE_SIZE / 2;
+            int spriteY = (int) explorerSprite.y  - SPRITE_SIZE / 2;
             g.drawImage(spriteImage, spriteX, spriteY, SPRITE_SIZE, SPRITE_SIZE, null);
         }
     }
