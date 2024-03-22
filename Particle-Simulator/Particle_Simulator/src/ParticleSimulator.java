@@ -17,7 +17,7 @@ class ParticleSimulator extends JFrame implements KeyListener {
         setTitle("Particle Simulator | FPS: 0");
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-        panel.setBorder(BorderFactory.createEmptyBorder(FRAME_HEIGHT / 2 - 325, 100, 0, 0));
+        panel.setBorder(BorderFactory.createEmptyBorder(40, 20, 0, 0));
 
         canvas = new Canvas();
         canvas.passFrame(this);
@@ -25,7 +25,7 @@ class ParticleSimulator extends JFrame implements KeyListener {
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 300, 250));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 50));
 
         particleByDistanceButton = new JButton("Add Particle (Distance)");
         particleByDistanceButton.addActionListener(e -> {
@@ -71,7 +71,7 @@ class ParticleSimulator extends JFrame implements KeyListener {
 
     private void toggleMode() {
         canvas.toggleExplorerMode();
-        
+
         boolean explorerMode = canvas.isExplorerMode();
         particleByDistanceButton.setEnabled(!explorerMode);
         particleByDistanceButton.setVisible(!explorerMode);
@@ -214,7 +214,7 @@ class ParticleByAngleInputDialog extends JDialog {
 
             // add particles to canvas
             Canvas canvas = ((ParticleSimulator) getParent()).getCanvas();
-            canvas.addParticlesByAngle(particleCount, 100, 100, 80, startAngle, endAngle);
+            canvas.addParticlesByAngle(particleCount, 100, 100, 80, -startAngle, -endAngle);
 
             // close the dialog
             setVisible(false);

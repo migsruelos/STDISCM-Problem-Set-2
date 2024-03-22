@@ -22,12 +22,16 @@ class Canvas extends JPanel implements KeyListener{
     private long lastFPSTime = System.currentTimeMillis();
     private final int WIDTH = 1280;
     private final int HEIGHT = 720;
+    private final int PERIPHERY_WIDTH = 33;
+    private final int PERIPHERY_HEIGHT = 19;
+    private final int SPRITE_SIZE = 30;
+    private final int PARTICLE_SIZE = 10;
     private JFrame frame;
 
     Canvas() {
         particles = new ArrayList<>();
         explorerParticles = new ArrayList<>();
-        setPreferredSize(new Dimension(1280, 720));
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
         addKeyListener(this);
         setFocusable(true);
         requestFocusInWindow();
@@ -193,38 +197,35 @@ class Canvas extends JPanel implements KeyListener{
     }
 
     private void renderExplorerMode(Graphics offscreenGraphics) {
+        // Calculate the bounds of the periphery
+        int peripheryLeft = getWidth() / 2 - PERIPHERY_WIDTH / 2 * PARTICLE_SIZE;
+        int peripheryTop = getHeight() / 2 - PERIPHERY_HEIGHT / 2 * PARTICLE_SIZE;
+        int peripheryRight = getWidth() / 2 + PERIPHERY_WIDTH / 2 * PARTICLE_SIZE;
+        int peripheryBottom = getHeight() / 2 + PERIPHERY_HEIGHT / 2 * PARTICLE_SIZE;
+
+        // Render particles from explorer mode
         for (Particle particle : particles) {
             int offsetX = (int) (particle.x - explorerSprite.x) + getWidth() / 2;
             int offsetY = (int) (particle.y - explorerSprite.y) + getHeight() / 2;
 
             if (Math.abs(offsetX) <= getWidth() / 2 && Math.abs(offsetY) <= getHeight() / 2) {
-                // Draw the resized sprite image at the particle's position
-                if (spriteImage != null) {
-                    int scaledWidth = 30; // Adjust as needed
-                    int scaledHeight = 30; // Adjust as needed
-
-                    offscreenGraphics.drawImage(spriteImage, getWidth() / 2 + offsetX - scaledWidth / 2, getHeight() / 2 + offsetY - scaledHeight / 2, scaledWidth, scaledHeight, null);
+                // Check if the particle is within the periphery bounds
+                if (offsetX >= -PERIPHERY_WIDTH / 2 * PARTICLE_SIZE && offsetX <= PERIPHERY_WIDTH / 2 * PARTICLE_SIZE &&
+                        offsetY >= -PERIPHERY_HEIGHT / 2 * PARTICLE_SIZE && offsetY <= PERIPHERY_HEIGHT / 2 * PARTICLE_SIZE) {
+                    // Render the particle within the periphery
+                    offscreenGraphics.fillOval(getWidth() / 2 + offsetX - PARTICLE_SIZE / 2, getHeight() / 2 + offsetY - PARTICLE_SIZE / 2, PARTICLE_SIZE, PARTICLE_SIZE);
                 }
             }
         }
 
-        if (spriteImage != null) {
-            int scaledWidth = 30;
-            int scaledHeight = 30;
+        // Draw the explorer sprite in the center
+        offscreenGraphics.drawImage(spriteImage, getWidth() / 2 - SPRITE_SIZE / 2, getHeight() / 2 - SPRITE_SIZE / 2, SPRITE_SIZE, SPRITE_SIZE, null);
 
-            offscreenGraphics.drawImage(spriteImage, (getWidth() - scaledWidth) / 2, (getHeight() - scaledHeight) / 2, scaledWidth, scaledHeight, null);
-        }
-
-        // Render particles from explorer mode
-        for (Particle particle : explorerParticles) {
-            int offsetX = (int) (particle.x - explorerSprite.x) + getWidth() / 2;
-            int offsetY = (int) (particle.y - explorerSprite.y) + getHeight() / 2;
-
-            if (Math.abs(offsetX) <= getWidth() / 2 && Math.abs(offsetY) <= getHeight() / 2) {
-                offscreenGraphics.fillOval(getWidth() / 2 + offsetX - 5, getHeight() / 2 + offsetY - 5, 10, 10);
-            }
-        }
+        // Draw the periphery boundaries
+        offscreenGraphics.setColor(Color.RED);
+        offscreenGraphics.drawRect(peripheryLeft, peripheryTop, PERIPHERY_WIDTH * PARTICLE_SIZE, PERIPHERY_HEIGHT * PARTICLE_SIZE);
     }
+
 
     void update() {
         calculateFPS();
