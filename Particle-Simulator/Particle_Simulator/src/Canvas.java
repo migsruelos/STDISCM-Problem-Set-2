@@ -211,20 +211,13 @@ class Canvas extends JPanel implements KeyListener{
         // Render particles within the sprite's periphery
         g.setColor(Color.GREEN);
         for (Particle particle : particles) {
-            int offsetX = (int) (particle.x - explorerSprite.x) + WIDTH / 2;
-            int offsetY = (int) (particle.y - explorerSprite.y) + HEIGHT / 2;
+            int distanceX = (int) (particle.x - explorerSprite.x);
+            int distanceY = (int) (particle.y - explorerSprite.y);
+            if(Math.abs(distanceX) > PERIPHERY_WIDTH || Math.abs(distanceY) > PERIPHERY_HEIGHT)
+                continue; //Skip rendering particle if distance greater than periphery
 
-            // Check if the particle is within the periphery bounds
-            if (offsetX >= peripheryLeft && offsetX <= peripheryRight &&
-                    offsetY >= peripheryTop && offsetY <= peripheryBottom) {
-                int distanceX = (int) (particle.x - explorerSprite.x);
-                int distanceY = (int) (particle.y - explorerSprite.y);
-                if(Math.abs(distanceX) > PERIPHERY_WIDTH || Math.abs(distanceY) > PERIPHERY_HEIGHT)
-                    continue; //Skip rendering particle if distance greater than periphery
-
-                g.fillOval((int) distanceX * (WIDTH/PERIPHERY_WIDTH),
-                        (int) distanceY * (HEIGHT/PERIPHERY_HEIGHT), 10, 10);
-            }
+            g.fillOval((int) distanceX * (WIDTH/PERIPHERY_WIDTH),
+                    (int) distanceY * (HEIGHT/PERIPHERY_HEIGHT), 10, 10);
         }
 
         // Render sprite image centered in the periphery
