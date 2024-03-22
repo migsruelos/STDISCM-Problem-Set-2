@@ -200,7 +200,13 @@ class Canvas extends JPanel implements KeyListener{
             // Check if the particle is within the periphery bounds
             if (offsetX >= peripheryLeft && offsetX <= peripheryRight &&
                     offsetY >= peripheryTop && offsetY <= peripheryBottom) {
-                g.fillOval((int) particle.x - 5, (int) particle.y - 5, 10, 10);
+                int distanceX = (int) (particle.x - explorerSprite.x);
+                int distanceY = (int) (particle.y - explorerSprite.y);
+                if(Math.abs(distanceX) > PERIPHERY_WIDTH || Math.abs(distanceY) > PERIPHERY_HEIGHT)
+                    continue; //Skip rendering particle if distance greater than periphery
+
+                g.fillOval((int) distanceX * (WIDTH/PERIPHERY_WIDTH),
+                        (int) distanceY * (HEIGHT/PERIPHERY_HEIGHT), 10, 10);
             }
         }
 
