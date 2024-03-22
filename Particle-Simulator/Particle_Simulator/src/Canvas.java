@@ -56,7 +56,8 @@ class Canvas extends JPanel implements KeyListener{
     void toggleExplorerMode() {
         explorerMode = !explorerMode;
         if (!explorerSpawned) {
-            explorerSprite = new Particle(WIDTH / 2 - SPRITE_SIZE / 2, HEIGHT / 2 - SPRITE_SIZE / 2, 0, 0);
+            explorerSprite = new Particle(WIDTH / 2 - SPRITE_SIZE / 2,
+                    HEIGHT / 2 - SPRITE_SIZE / 2, 0, 0);
             explorerSpawned = true;
         }
     }
@@ -202,12 +203,6 @@ class Canvas extends JPanel implements KeyListener{
     }
 
     private void renderExplorerMode(Graphics g) {
-        // Calculate the bounds of the periphery
-        int peripheryLeft = (int) (explorerSprite.x - PERIPHERY_WIDTH / 2 * PARTICLE_SIZE);
-        int peripheryTop = (int) (explorerSprite.y - PERIPHERY_HEIGHT / 2 * PARTICLE_SIZE);
-        int peripheryRight = peripheryLeft + PERIPHERY_WIDTH * PARTICLE_SIZE;
-        int peripheryBottom = peripheryTop + PERIPHERY_HEIGHT * PARTICLE_SIZE;
-
         // Render particles within the sprite's periphery
         g.setColor(Color.GREEN);
         for (Particle particle : particles) {
