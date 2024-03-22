@@ -56,8 +56,7 @@ class Canvas extends JPanel implements KeyListener{
     void toggleExplorerMode() {
         explorerMode = !explorerMode;
         if (!explorerSpawned) {
-            explorerSprite = new Particle(WIDTH / 2 - SPRITE_SIZE / 2,
-                    HEIGHT / 2 - SPRITE_SIZE / 2, 0, 0);
+            explorerSprite = new Particle(100, 100, 0, 0);
             explorerSpawned = true;
         }
     }
@@ -218,8 +217,8 @@ class Canvas extends JPanel implements KeyListener{
         // Render sprite image centered in the periphery
         if (explorerSpawned && spriteImage != null) {
             //Render this in center at all times
-            g.drawImage(spriteImage, WIDTH / 2 - SPRITE_SIZE / 2, HEIGHT / 2 - SPRITE_SIZE / 2,
-                    SPRITE_SIZE, SPRITE_SIZE, null);
+            g.drawImage(spriteImage, WIDTH / 2 - SPRITE_SIZE * 10, HEIGHT / 2 - SPRITE_SIZE * 10,
+                    SPRITE_SIZE*20, SPRITE_SIZE*20, null);
         }
     }
 
