@@ -115,11 +115,13 @@ class ParticleByDistanceInputDialog extends JDialog {
     private JTextField startYField;
     private JTextField endXField;
     private JTextField endYField;
+    private JTextField angleField;
+    private JTextField velocityField;
 
     ParticleByDistanceInputDialog(JFrame parent) {
         super(parent, "Particle Input", true);
         setLocationRelativeTo(parent);
-        setSize(400, 300);
+        setSize(400, 400);
 
         initUI();
     }
@@ -135,12 +137,17 @@ class ParticleByDistanceInputDialog extends JDialog {
         startYField = createInputField();
         endXField = createInputField();
         endYField = createInputField();
+        angleField = createInputField();
+        velocityField = createInputField();
+
 
         addRow(panel, gbc, "Particle Count:", particleCountField);
         addRow(panel, gbc, "Start X:", startXField);
         addRow(panel, gbc, "Start Y:", startYField);
         addRow(panel, gbc, "End X:", endXField);
         addRow(panel, gbc, "End Y:", endYField);
+        addRow(panel, gbc, "Angle:", angleField);
+        addRow(panel, gbc, "Velocity:", velocityField);
 
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(e -> {
@@ -150,17 +157,19 @@ class ParticleByDistanceInputDialog extends JDialog {
             double startY = Double.parseDouble(startYField.getText());
             double endX = Double.parseDouble(endXField.getText());
             double endY = Double.parseDouble(endYField.getText());
+            double angle = Double.parseDouble(angleField.getText());
+            double velocity = Double.parseDouble(velocityField.getText());
 
             // add particles to canvas
             Canvas canvas = ((ParticleSimulator) getParent()).getCanvas();
-            canvas.addParticles(particleCount, startX, startY, endX, endY, 45, 80);
+            canvas.addParticles(particleCount, startX, startY, endX, endY, -angle, velocity);
 
             // close the dialog
             setVisible(false);
         });
 
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy++;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         panel.add(submitButton, gbc);
@@ -192,7 +201,7 @@ class ParticleByAngleInputDialog extends JDialog {
     ParticleByAngleInputDialog(JFrame parent) {
         super(parent, "Particle Input", true);
         setLocationRelativeTo(parent);
-        setSize(400, 300);
+        setSize(400, 400);
 
         initUI();
     }
@@ -206,10 +215,16 @@ class ParticleByAngleInputDialog extends JDialog {
         particleCountField = createInputField();
         startAngleField = createInputField();
         endAngleField = createInputField();
+        JTextField startXField = createInputField();
+        JTextField startYField = createInputField();
+        JTextField velocityField = createInputField();
 
         addRow(panel, gbc, "Particle Count:", particleCountField);
         addRow(panel, gbc, "Start Angle:", startAngleField);
         addRow(panel, gbc, "End Angle:", endAngleField);
+        addRow(panel, gbc, "X:", startXField);
+        addRow(panel, gbc, "Y:", startYField);
+        addRow(panel, gbc, "Velocity:", velocityField);
 
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(e -> {
@@ -217,17 +232,20 @@ class ParticleByAngleInputDialog extends JDialog {
             int particleCount = Integer.parseInt(particleCountField.getText());
             double startAngle = Double.parseDouble(startAngleField.getText());
             double endAngle = Double.parseDouble(endAngleField.getText());
+            double x = Double.parseDouble(startXField.getText());
+            double y = Double.parseDouble(startYField.getText());
+            double v = Double.parseDouble(velocityField.getText());
 
             // add particles to canvas
             Canvas canvas = ((ParticleSimulator) getParent()).getCanvas();
-            canvas.addParticlesByAngle(particleCount, 100, 100, 80, -startAngle, -endAngle);
+            canvas.addParticlesByAngle(particleCount, x, y, v, -startAngle, -endAngle);
 
             // close the dialog
             setVisible(false);
         });
 
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         panel.add(submitButton, gbc);
@@ -255,11 +273,13 @@ class ParticleByVelocityInputDialog extends JDialog {
     private JTextField particleCountField;
     private JTextField startVelocityField;
     private JTextField endVelocityField;
+    private JTextField angleField;
+    private JTextField startXField, startYField;
 
     ParticleByVelocityInputDialog(JFrame parent) {
         super(parent, "Particle Input", true);
         setLocationRelativeTo(parent);
-        setSize(400, 300);
+        setSize(400, 400);
 
         initUI();
     }
@@ -273,10 +293,16 @@ class ParticleByVelocityInputDialog extends JDialog {
         particleCountField = createInputField();
         startVelocityField = createInputField();
         endVelocityField = createInputField();
+        angleField = createInputField();
+        startXField = createInputField();
+        startYField = createInputField();
 
         addRow(panel, gbc, "Particle Count:", particleCountField);
         addRow(panel, gbc, "Start Velocity:", startVelocityField);
         addRow(panel, gbc, "End Velocity:", endVelocityField);
+        addRow(panel, gbc, "Angle:", angleField);
+        addRow(panel, gbc, "X:", startXField);
+        addRow(panel, gbc, "Y:", startYField);
 
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(e -> {
@@ -284,17 +310,20 @@ class ParticleByVelocityInputDialog extends JDialog {
             int particleCount = Integer.parseInt(particleCountField.getText());
             double startVelocity= Double.parseDouble(startVelocityField.getText());
             double endVelocity = Double.parseDouble(endVelocityField.getText());
+            double a = Double.parseDouble(angleField.getText());
+            double x = Double.parseDouble(startXField.getText());
+            double y = Double.parseDouble(startYField.getText());
 
             // add particles to canvas
             Canvas canvas = ((ParticleSimulator) getParent()).getCanvas();
-            canvas.addParticlesByVelocity(particleCount, 100, 100, 45, startVelocity, endVelocity);
+            canvas.addParticlesByVelocity(particleCount, x, y, a, startVelocity, endVelocity);
 
             // close the dialog
             setVisible(false);
         });
 
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         panel.add(submitButton, gbc);

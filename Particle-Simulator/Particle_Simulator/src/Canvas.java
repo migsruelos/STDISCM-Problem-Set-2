@@ -65,7 +65,6 @@ class Canvas extends JPanel implements KeyListener{
         if (explorerSprite != null) {
             explorerSprite.x += dx;
             explorerSprite.y += dy;
-            //repaint();
         }
     }
     @Override
