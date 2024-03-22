@@ -34,22 +34,26 @@ class ParticleSimulator extends JFrame implements KeyListener {
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 50));
 
         particleByDistanceButton = new JButton("Add Particle (Distance)");
+        particleByDistanceButton.setFocusable(false);
         particleByDistanceButton.addActionListener(e -> {
             ParticleByDistanceInputDialog particleByDistanceDialog = new ParticleByDistanceInputDialog(this);
             particleByDistanceDialog.setVisible(true);
         });
         particleByAngleButton = new JButton("Add Particle (Angle)");
+        particleByAngleButton.setFocusable(false);
         particleByAngleButton.addActionListener(e -> {
             ParticleByAngleInputDialog particleByAngleDialog = new ParticleByAngleInputDialog(this);
             particleByAngleDialog.setVisible(true);
         });
         particleByVelocityButton = new JButton("Add Particle (Velocity)");
+        particleByVelocityButton.setFocusable(false);
         particleByVelocityButton.addActionListener(e -> {
             ParticleByVelocityInputDialog particleByVelocityDialog = new ParticleByVelocityInputDialog(this);
             particleByVelocityDialog.setVisible(true);
         });
 
         switchModeButton = new JButton("Switch Mode (Space)");
+        switchModeButton.setFocusable(false);
         switchModeButton.addActionListener(e -> toggleMode());
 
         buttonPanel.add(particleByDistanceButton);

@@ -220,8 +220,8 @@ class Canvas extends JPanel implements KeyListener{
 
         // Render sprite image centered in the periphery
         if (spriteImage != null) {
-            int spriteX = (int) explorerSprite.x  - SPRITE_SIZE / 2;
-            int spriteY = (int) explorerSprite.y  - SPRITE_SIZE / 2;
+            int spriteX = (int) explorerSprite.x - SPRITE_SIZE / 2;
+            int spriteY = (int) explorerSprite.y - SPRITE_SIZE / 2;
             g.drawImage(spriteImage, spriteX, spriteY, SPRITE_SIZE, SPRITE_SIZE, null);
         }
     }
